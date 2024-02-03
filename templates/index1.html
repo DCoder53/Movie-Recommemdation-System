@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="/">Movie Recommendation System</a>
+        <div class="left-pad">
+            <a href="/" class="active">Movie Finder</a>
+            <div class="dropdown">
+                <button class="dropbtn">Genre</button>
+                <div class="dropdown-content">
+                    <a href="Action">Action</a>
+                    <a href="Comedy">Comedy</a>
+                    <a href="Drama">Drama</a>
+                    <a href="Scify">Sci-Fi</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Top Actors <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="Srk">Shah Rukh Kahn</a>
+                    <a href="Suriya">Suriya</a>
+                    <a href="ShahidKapoor">Shahid Kapoor</a>
+                    <a href="Vijay">Vijay Sethupathi</a>
+                    <a href="Ranbir">Ranbir Kapoor</a>
+                    <a href="Manoj">Manoj Bajpayee</a>
+                    <a href="RDJ">Robert Downey Jr.</a>
+                </div>
+            </div>
+        </div>
+        <h1>  </h1>
+    <h1>Movie Recommendation System</h1>
+    <div class="Form">
+        <form id="searchForm" action="/" method="get">
+            <input type="text" name="movie" id="movie" class="Form1" list="moviesList" placeholder="Search for a movie">
+            <datalist id="moviesList" class="Option">
+                {% for movie in movies_list %}
+                <option value="{{ movie }}">
+                    {% endfor %}
+            </datalist>
+        </form>
+    </div>
+
+    <div class="grid">
+        {% for movie in recommend_movie %}
+        <div class="Box" onclick="redirectToDetails('{{ movie.id }}')">
+            <img src="{{ recommend_poster[loop.index0] }}" alt="{{ movie.title }} Poster">
+            <div class="text">
+                <h4>{{ movie.title }}</h4>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+        function redirectToDetails(movieId) {
+            var detailsURL = "/details/" + encodeURIComponent(movieId);
+            window.location.href = detailsURL;
+        }
+    </script>
+</body>
+
+</html>

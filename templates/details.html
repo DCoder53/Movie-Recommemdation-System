@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ title }} Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+  .moviesdetails {
+    display: flex;
+    background: linear-gradient(to right, rgba(21.5, 31.5, 31.5, 17) calc(26% - 345px), rgba(15.5, 15.5, 1.5, -0.9) 155%, rgba(31.5, 31.5, 31.5, 0) 101%),
+    url("{{ background_image }}");
+    height: 680px;
+    width: 100%;
+    border-bottom: 1px solid var(--primaryColor);
+    background-position: left calc((50vw - 170px) - 600px) top;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+</style>
+
+<body>
+  <div class="topnav" id="myTopnav">
+    <a href="/">Movie Recommendation System</a>
+    <div class="left-pad">
+      <a href="/" class="active">Movie Finder</a>
+      <div class="dropdown">
+        <button class="dropbtn">Genre</button>
+        <div class="dropdown-content">
+          <a href="Action">Action</a>
+          <a href="Comedy">Comedy</a>
+          <a href="Drama">Drama</a>
+          <a href="Scify">Sci-Fi</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Top Actors <i class="fa fa-caret-down"></i></button>
+        <div class="dropdown-content">
+          <a href="Srk">Shah Rukh Kahn</a>
+          <a href="Suriya">Suriya</a>
+          <a href="ShahidKapoor">Shahid Kapoor</a>
+          <a href="Vijay">Vijay Sethupathi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bgimg">
+    <div class="moviesdetails">
+      <img class="Boxindetails" src="{{ poster_path }}" alt="{{ title }} Poster" />
+
+      <div>
+        <h1>{{ title }} </h1>
+        <p style="padding: 10px; width: 700px;"><strong>Overview:</strong> {{ overview }}</p>
+        <p style="padding: 10px;"><strong>Status:</strong> {{status}}</p>
+        <p style="padding: 10px;"><strong>Release Date:</strong> {{ release_date }}</p>
+        <p style="padding: 10px;"><strong>Vote Average:</strong> {{ vote_average }}</p>
+        <p style="padding: 10px;" onclick="redirectToGenres('{{ genres }}')"><strong>Genres:</strong> {{ genres }}</p>
+        <p style="padding: 10px;"><strong>Original Language:</strong> {{ original_language }}</p>
+        <p style="padding: 10px;"><strong>Tagline:</strong> {{ tagline }}</p>
+        <p style="padding: 10px;"><strong>Director:</strong> {{ directors|join(', ') }}</p>
+        
+
+        <div style="padding: 10px;">
+          {% if trailer_link %}
+          <a href="{{ trailer_link }}" target="_blank" style="text-decoration: none;">
+            <i class="fa fa-youtube-play" style="font-size:20px;color:red"></i>
+          </a>
+          <a style="color: red; text-decoration: none;" href="{{ trailer_link }}">Play Trailer</a>
+          {% else %}
+          <p>No Trailer Available</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <h1>Cast Members:</h1>
+  <div class="cast1">
+    {% for poster, name in zipped_cast %}
+    <div class="cast1-member">
+      <img src="{{ poster }}" alt="{{ name }} Poster" class="cast-poster" onclick="redirectToActor('{{ name }}')" />
+      <p style="width: 90px; padding-top: 10px;" class="actor-link" onclick="redirectToActor('{{ name }}')">{{ name }}
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+  
+  {% if recommend_movie %}
+  <h1>Recommend Movie</h1>
+  <div class="grid">
+    {% for movie in recommend_movie %}
+    <div class="Box" onclick="redirectToDetails('{{ movie.id }}')" >
+        <img src="{{ recommend_poster[loop.index0] }}" alt="{{ movie.title }} Poster">
+        <div class="text">
+            <h4>{{ movie.title }}</h4>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+  <!-- ... (previous HTML code remains unchanged) -->
+  <script>
+    function redirectToActor(actorName) {
+      var actorURL = "/actor/" + encodeURIComponent(actorName);
+      window.location.href = actorURL;
+    }
+  </script>
+ <script>
+  async function redirectToGenres(genres) {
+    // Split the genres string into an array
+    var genreArray = genres.split(', ');
+
+    // Iterate over each genre and fetch the movies
+    for (var i = 0; i < genreArray.length; i++) {
+      await fetchGenreAndRedirect(genreArray[i]);
+    }
+  }
+
+  async function fetchGenreAndRedirect(genre) {
+    var genreURL = "/genre/" + encodeURIComponent(genre);
+
+    // Fetch movies for the genre
+    await fetch(genreURL)
+      .then(response => response.json())
+      .then(data => {
+        // Log or process the data as needed
+        console.log(data);
+
+        // Redirect to the genre page
+        window.location.href = genreURL;
+      })
+      .catch(error => {
+        console.error('Error fetching genre:', error);
+      });
+  }
+  function redirectToDetails(movieId) {
+            var detailsURL = "/details/" + encodeURIComponent(movieId);
+            window.location.href = detailsURL;
+        }
+</script>
+
+  
+  
+  
+  
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ genre }} Movies</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+  <div class="topnav" id="myTopnav">
+    <a href="/">Movie Recommendation System</a>
+    <div class="left-pad">
+      <a href="/" class="active">Movie Finder</a>
+      <div class="dropdown">
+        <button class="dropbtn">Genre</button>
+        <div class="dropdown-content">
+          <a href="Action">Action</a>
+          <a href="Comedy">Comedy</a>
+          <a href="Drama">Drama</a>
+          <a href="Scify">Sci-Fi</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Top Actors <i class="fa fa-caret-down"></i></button>
+        <div class="dropdown-content">
+          <a href="Srk">Shah Rukh Kahn</a>
+          <a href="Suriya">Suriya</a>
+          <a href="ShahidKapoor">Shahid Kapoor</a>
+          <a href="Vijay">Vijay Sethupathi</a>
+        </div>
+      </div>
+    </div>
+  </div><!-- Missing closing div tag -->
+  <h1 class="h1">{{ genre }} Movies</h1>
+  <div class="grid">
+    {% for i in range(recommend_movie|length) %}
+    <div class="Box"  onclick="redirectToDetails('{{ movies_id[i] }}')">
+      <img src="{{ recommend_poster[i] }}" alt="{{ recommend_movie[i] }} Poster">
+      <div class="text">
+        <p>{{ recommend_movie[i] }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <script>
+    function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+    function redirectToDetails(movieId) {
+        var detailsURL = "/details/" + encodeURIComponent(movieId);
+        window.location.href = detailsURL;
+    }
+</script>
+</body>
+
+</html>

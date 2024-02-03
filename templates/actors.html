@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{actor_name}} Movies</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="/">Movie Recommendation System</a>
+        <div class="left-pad">
+            <a href="/" class="active">Movie Finder</a>
+            <div class="dropdown">
+                <button class="dropbtn">Genre</button>
+                <div class="dropdown-content">
+                    <a href="Action">Action</a>
+                    <a href="Comedy">Comedy</a>
+                    <a href="Drama">Drama</a>
+                    <a href="Scify">Sci-Fi</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Top Actors <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="Srk">Shah Rukh Kahn</a>
+                    <a href="Suriya">Suriya</a>
+                    <a href="ShahidKapoor">Shahid Kapoor</a>
+                    <a href="Vijay">Vijay Sethupathi</a>
+                    <a href="Ranbir">Ranbir Kapoor</a>
+                    <a href="Manoj">Manoj Bajpayee</a>
+                    <a href="RDJ">Robert Downey Jr.</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 class="h1">Top Movies of {{actor_name}}</h1>
+    <div class="grid">
+        {% for i in range(movies_title|length) %}
+        <div class="Box"  onclick="redirectToDetails('{{ movies_id[i] }}')">
+            <img src="{{ movies_poster[i] }}" alt="{{ movies_title[i] }} Poster">
+            <div class="text">
+                <p>{{ movies_title[i] }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+        function redirectToDetails(movieId) {
+            var detailsURL = "/details/" + encodeURIComponent(movieId);
+            window.location.href = detailsURL;
+        }
+    </script>
+</body>
+
+</html>
